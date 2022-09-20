@@ -4,7 +4,7 @@ import "./App.css";
 import ManagePage from "./pages/Manage";
 import ManageBookDetailPage from "./pages/ManageBookDetail";
 import ManageBookRegisterPage from "./pages/ManageBookRegister";
-
+import SellBookPage from "./pages/SellBook";
 function App() {
   return (
     <Routes>
@@ -14,6 +14,7 @@ function App() {
         path="/manage/book/register"
         element={<ManageBookRegisterPage />}
       />
+      <Route path="/sell/book" element={<SellBookPage />} />
     </Routes>
   );
 }
