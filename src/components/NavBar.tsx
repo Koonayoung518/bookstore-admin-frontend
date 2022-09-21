@@ -4,29 +4,29 @@ import {
   Box,
   Container,
   Button,
-  MenuItem,
   Toolbar,
   Avatar,
   Menu,
   IconButton,
   Tooltip,
-  TextField,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const pages = ["Products", "Pricing", "Blog"];
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const navigate = useNavigate();
+  const goSalesHistoryPage = () => {
+    navigate("/sell/book/history");
+  };
+  const goSellBookPage = () => {
+    navigate("/sell/book");
+  };
 
-  const [anchorElNav, setAnchorElNav] = useState("Profile");
-  const [anchorElUser, setAnchorElUser] = useState("Profile");
-
+  const goShoppingPage = () => {
+    navigate("/bookStore");
+  };
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {};
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {};
-
-  const handleCloseNavMenu = () => {};
-
-  const handleCloseUserMenu = () => {};
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -78,15 +78,27 @@ const NavBar = () => {
             BookStore
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={goSellBookPage}
+            >
+              POS
+            </Button>
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={goSalesHistoryPage}
+            >
+              판매내역
+            </Button>
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={goShoppingPage}
+            >
+              웹사이트
+            </Button>
+            <Button sx={{ my: 2, color: "white", display: "block" }}>
+              설정
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

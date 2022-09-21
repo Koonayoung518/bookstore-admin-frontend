@@ -5,6 +5,8 @@ import ManagePage from "./pages/Manage";
 import ManageBookDetailPage from "./pages/ManageBookDetail";
 import ManageBookRegisterPage from "./pages/ManageBookRegister";
 import SellBookPage from "./pages/SellBook";
+import SalesHistoryPage from "./pages/SalesHistory";
+import ShoppingPage from "./pages/Shopping";
 function App() {
   return (
     <Routes>
@@ -15,6 +17,10 @@ function App() {
         element={<ManageBookRegisterPage />}
       />
       <Route path="/sell/book" element={<SellBookPage />} />
+
+      <Route path="/sell/book/history" element={<SalesHistoryPage />} />
+
+      <Route path="/bookStore" element={<ShoppingPage />} />
     </Routes>
   );
 }
