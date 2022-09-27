@@ -5,9 +5,13 @@ import {
   Button,
   Card,
   CardHeader,
+  CardMedia,
   CardContent,
   CardActions,
   Divider,
+  Collapse,
+  IconButton,
+  Alert,
   Grid,
   TextField,
   Typography,
@@ -15,7 +19,9 @@ import {
 import Api from "../api/Api";
 import { useParams } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import { useNavigate } from "react-router-dom";
 const ManageBookDetailPage = (props: any) => {
+  const navigate = useNavigate();
   const params = useParams();
   const api = "http://localhost:8080/manage/book/" + params.isbn;
   const [book, setBook] = useState({
@@ -30,9 +36,34 @@ const ManageBookDetailPage = (props: any) => {
     bookType: "",
   });
 
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
   const onDelete = () => {
-    deleteData();
+    const confirm = window.confirm("삭제하시겠습니까?");
+    if (confirm === true) {
+      deleteData();
+      navigate("/manage/book");
+    }
   };
+
+  const onUpdate = () => {
+    const confirm = window.confirm("수정하시겠습니까?");
+    if (confirm === true) {
+      postData();
+      navigate("/manage/book/" + params.isbn);
+    }
+  };
+
+  const postData = useCallback(async () => {
+    const result = await new Api().postData(
+      "http://localhost:8080/manage/update/book",
+      {
+        isbn: book.isbn,
+        price: price,
+        stock: stock,
+      }
+    );
+  }, [book, price, stock]);
 
   const deleteData = useCallback(async () => {
     const response = await new Api().deleteData(
@@ -53,14 +84,21 @@ const ManageBookDetailPage = (props: any) => {
       bookType: resBook.list.bookType,
     };
     setBook(_inputBook);
+    setPrice(resBook.list.price);
+    setStock(resBook.list.stock);
+  }, []); //book이 변경될 때 함수 재생성
+
+  const onSetPrice = useCallback((e: any) => {
+    setPrice(e.target.value);
+  }, []);
+
+  const onSetStock = useCallback((e: any) => {
+    setStock(e.target.value);
   }, []);
 
   useEffect(() => {
     bringData();
-  }, [bringData]);
-
-  const registerd = book.bookType === "registered";
-
+  }, []);
   return (
     <>
       <NavBar></NavBar>
@@ -75,6 +113,7 @@ const ManageBookDetailPage = (props: any) => {
           <Typography sx={{ mb: 3 }} variant="h4">
             책 정보
           </Typography>
+
           <Grid container spacing={3}>
             <Grid item lg={4} md={6} xs={12}>
               <Card {...book}>
@@ -86,13 +125,15 @@ const ManageBookDetailPage = (props: any) => {
                       flexDirection: "column",
                     }}
                   >
-                    <img alt="이미지 없음" src={book.image} />
+                    <CardMedia
+                      component="img"
+                      height="250"
+                      image={book.image}
+                      alt="이미지 없음"
+                    />
 
                     <Typography color="textPrimary" gutterBottom variant="h5">
                       {book.title}
-                    </Typography>
-                    <Typography color="red" variant="h6">
-                      {book.bookType}
                     </Typography>
                   </Box>
                 </CardContent>
@@ -156,25 +197,29 @@ const ManageBookDetailPage = (props: any) => {
                       </Grid>
                       <Grid item md={6} xs={12}>
                         <TextField
+                          id="outlined-number"
                           fullWidth
                           label="가격"
                           name="가격"
-                          // onChange={handleChange}
+                          onChange={onSetPrice}
                           required
                           type="number"
-                          value={book.price}
+                          value={price}
                           variant="outlined"
                         />
                       </Grid>
                       <Grid item md={6} xs={12}>
                         <TextField
-                          fullWidth
+                          id="outlined-number"
                           label="재고"
-                          name="재고"
-                          //onChange={handleChange}
+                          type="number"
+                          onChange={onSetStock}
+                          fullWidth
                           required
-                          value={book.stock}
-                          variant="outlined"
+                          value={stock}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         ></TextField>
                       </Grid>
                     </Grid>
@@ -191,10 +236,15 @@ const ManageBookDetailPage = (props: any) => {
                       color="primary"
                       variant="contained"
                       onClick={onDelete}
+                      sx={{ mr: 2 }}
                     >
                       Delete
                     </Button>
-                    <Button color="primary" variant="contained">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={onUpdate}
+                    >
                       Update
                     </Button>
                   </Box>
