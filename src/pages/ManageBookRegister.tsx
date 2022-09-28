@@ -99,17 +99,6 @@ const ManageBookRegisterPage = (props: any) => {
         booktype: book.booktype,
       }
     );
-    console.log({
-      isbn: book.isbn,
-      title: book.title,
-      publisher: book.publisher,
-      author: book.author,
-      price: price,
-      pubdate: book.pubdate,
-      stock: stock,
-      image: book.image,
-      booktype: book.booktype,
-    });
   }, [book, price, stock]);
   return (
     <>

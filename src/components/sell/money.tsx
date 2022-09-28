@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import MoneyIcon from "@mui/icons-material/Money";
-const Money = (props: any) => {
+const Money = ({ props }: any) => {
   return (
     <Card {...props}>
       <CardContent>
@@ -17,7 +17,7 @@ const Money = (props: any) => {
               받은 금액
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              33,200원
+              {props}원
             </Typography>
           </Grid>
           <Grid item>

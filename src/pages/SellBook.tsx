@@ -15,6 +15,14 @@ const SellBookPage = () => {
   const goBookDetailPage = () => {
     navigate(`/manage/book`);
   };
+
+  const [total, setTotal] = useState(0);
+  const [received, setReceived] = useState(0);
+  const [change, setChange] = useState(0);
+
+  const onSetChange = useCallback((e: any) => {
+    setChange(received - total);
+  }, []);
   return (
     <>
       <NavBar></NavBar>
@@ -28,20 +36,20 @@ const SellBookPage = () => {
         <Container maxWidth={false}>
           <Grid container spacing={3}>
             <Grid item xl={6} lg={6} sm={6} xs={12}>
-              <TotalPrice sx={{ height: "100%" }} />
+              <TotalPrice sx={{ height: "100%" }} props={total} />
             </Grid>
             <Grid item lg={6} sm={6} xl={6} xs={12}>
-              <Change />
+              <Change props={change} />
             </Grid>
             <Grid item lg={12} md={12} xl={12} xs={12}>
               <SellBookList />
             </Grid>
             <Grid item xl={6} lg={3} sm={6} xs={12}>
-              <Money sx={{ height: "100%" }} />
+              <Money sx={{ height: "100%" }} props={received} />
             </Grid>
 
             <Grid item xl={3} lg={3} sm={6} xs={12}>
-              <Cash />
+              <Cash onClick={onSetChange} />
             </Grid>
             <Grid item xl={3} lg={3} sm={6} xs={12}>
               <CreditCard onClick={goBookDetailPage} />

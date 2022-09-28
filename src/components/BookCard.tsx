@@ -52,7 +52,7 @@ const BookCard = ({ product, ...rest }: any) => {
           {product.author}
         </Box>
         <Box component="span" sx={{ color: "primary.main", fontSize: 20 }}>
-          {product.price}
+          {product.price}원
         </Box>
         <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
           재고 : {product.stock}권
@@ -75,84 +75,6 @@ const BookCard = ({ product, ...rest }: any) => {
         ></Box>
       </Box>
     </Box>
-
-    // <Card
-    //   sx={{
-    //     display: "flex",
-    //     flexDirection: "column",
-    //     height: "100%",
-    //   }}
-    //   {...rest}
-    // >
-    //   <Box>
-    //     <CardMedia
-    //       component="img"
-    //       sx={{ width: 151 }}
-    //       image={product.image}
-    //       alt="book image"
-    //     />
-    //   </Box>
-    //   <CardContent sx={{ flex: "1 0 auto" }}>
-    //     <Typography
-    //       align="center"
-    //       color="textPrimary"
-    //       gutterBottom
-    //       variant="h5"
-    //     >
-    //       {product.title}
-    //     </Typography>
-    //     <Typography align="center" color="textPrimary" variant="body1">
-    //       {product.publisher}
-    //     </Typography>
-    //     <Typography align="center" color="textPrimary" variant="body1">
-    //       {product.author}
-    //     </Typography>
-    //     <Typography align="center" color="textPrimary" variant="body1">
-    //       {product.price}
-    //     </Typography>
-    //     <Typography align="center" color="textPrimary" variant="body1">
-    //       {product.stock}
-    //     </Typography>
-    //   </CardContent>
-    //   <Box sx={{ flexGrow: 1 }} />
-    //   <Divider />
-    //   <Box sx={{ p: 2 }}>
-    //     <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
-    //       <Grid
-    //         item
-    //         sx={{
-    //           alignItems: "center",
-    //           display: "flex",
-    //         }}
-    //       >
-    //         <Typography
-    //           color="textSecondary"
-    //           display="inline"
-    //           sx={{ pl: 1 }}
-    //           variant="body2"
-    //         >
-    //           Updated 2hr ago
-    //         </Typography>
-    //       </Grid>
-    //       <Grid
-    //         item
-    //         sx={{
-    //           alignItems: "center",
-    //           display: "flex",
-    //         }}
-    //       >
-    //         <Typography
-    //           color="textSecondary"
-    //           display="inline"
-    //           sx={{ pl: 1 }}
-    //           variant="body2"
-    //         >
-    //           {product.totalDownloads} Downloads
-    //         </Typography>
-    //       </Grid>
-    //     </Grid>
-    //   </Box>
-    // </Card>
   );
 };
 

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 
-const Change = (props: any) => {
+const Change = ({ props }: any) => {
   return (
     <Card sx={{ height: "100%" }} {...props}>
       <CardContent>
@@ -18,7 +18,7 @@ const Change = (props: any) => {
               거스름 돈
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              1,200원
+              {props}원
             </Typography>
           </Grid>
           <Grid item>

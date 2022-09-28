@@ -7,6 +7,7 @@ import ManageBookRegisterPage from "./pages/ManageBookRegister";
 import SellBookPage from "./pages/SellBook";
 import SalesHistoryPage from "./pages/SalesHistory";
 import ShoppingPage from "./pages/Shopping";
+import SalesHistoryDetailPage from "./pages/SalesHistoryDetail";
 function App() {
   return (
     <Routes>
@@ -21,6 +22,10 @@ function App() {
       <Route path="/sell/book/history" element={<SalesHistoryPage />} />
 
       <Route path="/bookStore" element={<ShoppingPage />} />
+      <Route
+        path="/sell/book/history/test"
+        element={<SalesHistoryDetailPage />}
+      />
     </Routes>
   );
 }
