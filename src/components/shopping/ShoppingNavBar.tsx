@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { green } from "@mui/material/colors";
 
-const NavBar = () => {
+const ShoppingNavBar = () => {
   const navigate = useNavigate();
   const goSalesHistoryPage = () => {
     navigate("/sell/book/history");
@@ -115,4 +115,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default ShoppingNavBar;

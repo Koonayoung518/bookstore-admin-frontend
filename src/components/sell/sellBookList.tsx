@@ -16,30 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
-const orders = [
-  {
-    id: "123",
-    ref: "9788965402602",
-    amount: 3,
-    customer: {
-      name: "스프링 부트와 AWS로 혼자 구현하는 웹 서비스",
-    },
-    createdAt: 22000,
-    status: 66000,
-  },
-  {
-    id: "1234",
-    ref: "9791185578606",
-    amount: 1,
-    customer: {
-      name: "인공지능 (파이썬으로 배우는 머신러닝과 딥러닝)",
-    },
-    createdAt: 30000,
-    status: 30000,
-  },
-];
-
-const SellBookList = (props: any) => {
+const SellBookList = ({ props }: any) => {
   return (
     <Card {...props}>
       <CardHeader title="내역" />
@@ -56,21 +33,22 @@ const SellBookList = (props: any) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow hover key={order.id}>
-                  <TableCell>{order.ref}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
-                  <TableCell>{order.createdAt}</TableCell>
+              {props.map((book: any) => (
+                <TableRow hover key={book.isbn}>
+                  <TableCell>{book.isbn}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                  <TableCell>{book.price}</TableCell>
+
                   <TableCell>
                     <Button color="primary" size="small" variant="text">
                       <RemoveIcon />
                     </Button>
-                    {order.amount}
+                    1
                     <Button color="secondary" size="small" variant="text">
                       <AddIcon />
                     </Button>
                   </TableCell>
-                  <TableCell>{order.status}</TableCell>
+                  <TableCell>상태</TableCell>
                 </TableRow>
               ))}
             </TableBody>

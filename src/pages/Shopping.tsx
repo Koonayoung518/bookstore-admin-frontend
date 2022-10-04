@@ -14,6 +14,7 @@ import {
 import { useCallback, useState, useEffect } from "react";
 import Api from "../api/Api";
 import BookCard from "../components/BookCard";
+import ShoppingNavBar from "../components/shopping/ShoppingNavBar";
 
 const ShoppingPage = () => {
   const [bookList, setBookList] = useState([
@@ -60,67 +61,70 @@ const ShoppingPage = () => {
   console.log("book data ::", bookList);
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth={false}>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            m: -1,
-          }}
-        >
-          <Typography sx={{ m: 1 }} variant="h4">
-            Books
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 3 }}>
-          <Card>
-            <CardContent>
-              <Box sx={{ maxWidth: 500 }}>
-                <TextField
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SvgIcon fontSize="small" color="action"></SvgIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder="Search product"
-                  variant="outlined"
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
-        <Box sx={{ pt: 3 }}>
-          <Grid container spacing={5}>
-            {bookList.map((book) => (
-              <Grid item key={book.isbn} lg={8} md={6} xs={12}>
-                <BookCard product={book} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            pt: 3,
-          }}
-        >
-          <Pagination color="primary" count={3} size="small" />
-        </Box>
-      </Container>
-    </Box>
+    <>
+      <ShoppingNavBar></ShoppingNavBar>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth={false}>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              m: -1,
+            }}
+          >
+            <Typography sx={{ m: 1 }} variant="h4">
+              Books
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 3 }}>
+            <Card>
+              <CardContent>
+                <Box sx={{ maxWidth: 500 }}>
+                  <TextField
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SvgIcon fontSize="small" color="action"></SvgIcon>
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder="Search product"
+                    variant="outlined"
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+          <Box sx={{ pt: 3 }}>
+            <Grid container spacing={5}>
+              {bookList.map((book) => (
+                <Grid item key={book.isbn} lg={8} md={6} xs={12}>
+                  <BookCard product={book} />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              pt: 3,
+            }}
+          >
+            <Pagination color="primary" count={3} size="small" />
+          </Box>
+        </Container>
+      </Box>
+    </>
   );
 };
 
