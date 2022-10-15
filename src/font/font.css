@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "NanumSquareNeo-light";
+  src: url("./NanumSquareNeoTTF-aLt.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NanumSquareNeo-regular";
+  src: url("./NanumSquareNeoTTF-bRg.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquareNeo-bold";
+  src: url("./NanumSquareNeoTTF-cBd.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "NanumSquareNeo-extraBoard";
+  src: url("./NanumSquareNeoTTF-dEb.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NanumSquareNeo-heavy";
+  src: url("./NanumSquareNeoTTF-eHv.woff2") format("woff2");
+  font-display: swap;
+}
+
+.title {
+  font-family: NanumSquareNeo;
+}

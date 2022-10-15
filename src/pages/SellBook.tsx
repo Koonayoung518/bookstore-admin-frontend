@@ -49,19 +49,30 @@ const SellBookPage = () => {
 
   const onSetChange = useCallback(() => {
     setChange(received - totalPrice);
+    postData();
   }, [received, totalPrice]);
 
   const [isbn, setIsbn] = useState("");
 
-  const [bookList, setBookList] = useState([
-    {
-      isbn: "",
-      title: "",
-      unitPrice: 0,
-      amount: 0,
-      total: 0,
-    },
-  ]);
+  interface BookType {
+    isbn: string;
+    title: string;
+    unitPrice: number;
+    amount: number;
+    total: number;
+  }
+  const [bookList, setBookList] = useState<BookType[]>([]);
+
+  // const [bookList, setBookList] = useState<Array<BookType>>([]);
+  // const [bookList, setBookList] = useState([
+  //   {
+  //     isbn: "",
+  //     title: "",
+  //     unitPrice: 0,
+  //     amount: 0,
+  //     total: 0,
+  //   },
+  // ]);
 
   const onSetIsbn = useCallback((e: any) => {
     setIsbn(e.target.value);
@@ -82,16 +93,26 @@ const SellBookPage = () => {
       book.isbn === resBook.list.isbn ? (newbook = false) : (newbook = true)
     );
     if (newbook) {
-      const _inputBook = {
-        isbn: resBook.list.isbn,
-        title: resBook.list.title,
-        unitPrice: resBook.list.unitPrice,
-        amount: 1,
-        total: resBook.list.unitPrice,
-      };
+      // const _inputBook = {
+      //   isbn: resBook.list.isbn,
+      //   title: resBook.list.title,
+      //   unitPrice: resBook.list.unitPrice,
+      //   amount: 1,
+      //   total: resBook.list.unitPrice,
+      // };
       console.log(resBook);
-
-      setBookList((bookList) => [...bookList, _inputBook]);
+      console.log(bookList);
+        
+      setBookList((bookList) => [
+        ...bookList,
+        {
+          isbn: resBook.list.isbn,
+          title: resBook.list.title,
+          unitPrice: resBook.list.unitPrice,
+          amount: 1,
+          total: resBook.list.unitPrice,
+        },
+      ]);
     } else {
       setBookList(
         bookList.map((book) =>
@@ -106,6 +127,22 @@ const SellBookPage = () => {
       );
     }
   }, [bookList, isbn]);
+
+  const postData = useCallback(async () => {
+    const result = await new Api().postData(
+      "http://localhost:8080/manage/sell/book",
+      {
+        bookList,
+        totalPrice: totalPrice,
+        payment: "Cash",
+      }
+    );
+    console.log({
+      bookList,
+      totalPrice: totalPrice,
+      payment: "Cash",
+    });
+  }, [bookList]);
 
   const onPlusAmount = useCallback(
     (isbn: any) => {

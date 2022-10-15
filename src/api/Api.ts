@@ -25,6 +25,18 @@ class Api {
     }
   }
 
+  async putData(url: string, data: any) {
+    try {
+      const response = await axios.put(url, data);
+      console.log(response.data);
+
+      const result = await response.data;
+      return result;
+    } catch (err) {
+      console.log(url + ":: put data error");
+    }
+  }
+
   async deleteData(url: string) {
     try {
       const response = await axios.delete(url);
