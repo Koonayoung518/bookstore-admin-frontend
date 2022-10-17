@@ -32,6 +32,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import SearchIcon from "@mui/icons-material/Search";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { Link, useNavigate } from "react-router-dom";
+
 const SalesHistoryPage = () => {
   const theme = createTheme({
     typography: {
@@ -47,19 +49,36 @@ const SalesHistoryPage = () => {
       },
     },
   });
+  const navigate = useNavigate();
+
+  const goDetailPage = (id: any) => {
+    navigate("/sell/book/history/" + id);
+  };
 
   interface HistoryType {
     id: number;
     sellDate: string;
     totalPrice: number;
   }
+  const [firstDay, setFirstDay] = useState<Dayjs | null>(null);
+  const [lastDay, setlastDay] = useState<Dayjs | null>(null);
+
+  console.log("first " + firstDay?.format() + " last " + lastDay?.format());
   const [historyList, setHistoryList] = useState<HistoryType[]>([]);
   const [lastIdx, setLastIdx] = useState(0);
   const [type, setType] = useState("DATE");
   const onSetType = (e: SelectChangeEvent) => {
     setType(e.target.value as string);
   };
+  const [price, setPrice] = useState(0);
 
+  const onSetPrice = useCallback((e: any) => {
+    setPrice(e.target.value);
+  }, []);
+
+  const onSearch = () => {
+    bringDataByConditon();
+  };
   const bringData = useCallback(async () => {
     const resHistory = await new Api().getData(
       "http://localhost:8080/admin/history",
@@ -79,20 +98,41 @@ const SalesHistoryPage = () => {
     console.log(resHistory);
     setHistoryList(historyList.concat(_historyList));
   }, []);
+  const bringDataByConditon = useCallback(async () => {
+    const paramDate = {
+      price: price,
+      startDate: firstDay?.format(),
+      endDate: lastDay?.format(),
+    };
+    setHistoryList([]);
+    const resHistory = await new Api().getData(
+      `http://localhost:8080/admin/history/type/${type}`,
+      {
+        price: price,
+        startDate: "2022-10-15T01:49:43.560073",
+        endDate: "2022-10-17T01:49:43.560073",
+      }
+    );
 
+    const _historyList = await resHistory.data.content.map(
+      (historyData: any) => (
+        setLastIdx(lastIdx + 1),
+        {
+          id: historyData.id,
+          sellDate: historyData.sellDate,
+          totalPrice: historyData.totalPrice,
+        }
+      )
+    );
+    console.log(resHistory);
+    setHistoryList(historyList.concat(_historyList));
+  }, [type, price, firstDay, lastDay]);
   useEffect(() => {
     bringData();
   }, []);
 
   console.log("book data ::", historyList);
 
-  const [firstDay, setFirstDay] = useState<Dayjs | null>(null);
-  const [lastDay, setlastDay] = useState<Dayjs | null>(null);
-
-  // const mile = Date.parse(firstDay);
-  // const date = new Date(firstDay);
-
-  console.log("first" + firstDay?.format() + " last" + lastDay);
   return (
     <>
       <NavBar></NavBar>
@@ -189,9 +229,14 @@ const SalesHistoryPage = () => {
                         }}
                         placeholder="금액"
                         variant="outlined"
+                        onChange={onSetPrice}
                       />
                     )}
-                    <Button variant="contained" sx={{ ml: 2 }}>
+                    <Button
+                      variant="contained"
+                      sx={{ ml: 2 }}
+                      onClick={onSearch}
+                    >
                       <SearchIcon fontSize="large"></SearchIcon>
                     </Button>
                   </Box>
@@ -236,7 +281,11 @@ const SalesHistoryPage = () => {
                                 <TableCell>{history.sellDate}</TableCell>
                                 <TableCell>{history.totalPrice}</TableCell>
                                 <TableCell>
-                                  <Button color="primary" variant="contained">
+                                  <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={() => goDetailPage(history.id)}
+                                  >
                                     상세 보기
                                   </Button>
                                 </TableCell>

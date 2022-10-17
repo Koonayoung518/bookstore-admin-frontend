@@ -35,6 +35,10 @@ const NavBar = () => {
   const goShoppingPage = () => {
     navigate("/bookStore");
   };
+
+  const goSettingPage = () => {
+    navigate("/setting");
+  };
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {};
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {};
   return (
@@ -137,6 +141,7 @@ const NavBar = () => {
                   fontSize: 20,
                   fontFamily: "NanumSquareNeo-bold",
                 }}
+                onClick={goSettingPage}
               >
                 설정
               </Button>

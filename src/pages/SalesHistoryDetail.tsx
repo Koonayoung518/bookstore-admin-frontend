@@ -1,3 +1,4 @@
+import { useCallback, useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -23,44 +24,60 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { Link, useNavigate } from "react-router-dom";
 import BookCard from "../components/BookCard";
 import NavBar from "../components/NavBar";
+import Api from "../api/Api";
 
-const SalesHistoryDetailPage = () => {
-  const TAX_RATE = 0.07;
-
-  function ccyFormat(num: number) {
-    return `${num.toFixed(2)}`;
+import { useParams } from "react-router-dom";
+const SalesHistoryDetailPage = (props: any) => {
+  const params = useParams();
+  const [history, setHistory] = useState({
+    sellDate: "",
+    totalPrice: 0,
+    money: 0,
+    change: 0,
+    payment: "",
+  });
+  interface BookType {
+    isbn: string;
+    title: string;
+    unitPrice: number;
+    amount: number;
+    total: string;
   }
+  const [bookList, setBookList] = useState<BookType[]>([]);
+  const [lastIdx, setLastIdx] = useState(0);
 
-  function priceRow(qty: number, unit: number) {
-    return qty * unit;
-  }
+  const bringData = useCallback(async () => {
+    const resHistory = await new Api().getData(
+      `http://localhost:8080/admin/history/${params.id}`,
+      {}
+    );
+    const _inputHistory = {
+      sellDate: resHistory.data.sellDate,
+      totalPrice: resHistory.data.totalPrice,
+      money: resHistory.data.money,
+      change: resHistory.data.change,
+      payment: resHistory.data.payment,
+    };
+    setHistory(_inputHistory);
+    const _bookList = await resHistory.data.bookList.map(
+      (bookData: any) => (
+        setLastIdx(lastIdx + 1),
+        {
+          isbn: bookData.isbn,
+          title: bookData.title,
+          unitPrice: bookData.unitPrice,
+          amount: bookData.amount,
+          total: bookData.total,
+        }
+      )
+    );
+    console.log(resHistory);
+    setBookList(bookList.concat(_bookList));
+  }, []);
 
-  function createRow(desc: string, qty: number, unit: number) {
-    const price = priceRow(qty, unit);
-    return { desc, qty, unit, price };
-  }
-
-  interface Row {
-    desc: string;
-    qty: number;
-    unit: number;
-    price: number;
-  }
-
-  function subtotal(items: readonly Row[]) {
-    return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-  }
-
-  const rows = [
-    createRow("Paperclips (Box)", 100, 1.15),
-    createRow("Paper (Case)", 10, 45.99),
-    createRow("Waste Basket", 2, 17.99),
-  ];
-
-  const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
+  useEffect(() => {
+    bringData();
+  }, []);
   return (
     <>
       <NavBar></NavBar>
@@ -84,30 +101,12 @@ const SalesHistoryDetailPage = () => {
             <Typography sx={{ m: 1 }} variant="h4">
               판매내역
             </Typography>
-            <Box sx={{ m: 1 }}>
-              <Button sx={{ mr: 1 }}>Import</Button>
-              <Button sx={{ mr: 1 }}>Export</Button>
-              <Button color="primary" variant="contained">
-                Add products
-              </Button>
-            </Box>
           </Box>
           <Box sx={{ mt: 3 }}>
             <Card>
               <CardContent>
                 <Box sx={{ maxWidth: 500 }}>
-                  <TextField
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SvgIcon fontSize="small" color="action"></SvgIcon>
-                        </InputAdornment>
-                      ),
-                    }}
-                    placeholder="Search product"
-                    variant="outlined"
-                  />
+                  <Typography>판매일 : {history.sellDate}</Typography>
                 </Box>
               </CardContent>
             </Card>
@@ -130,48 +129,36 @@ const SalesHistoryDetailPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.desc}>
-                    <TableCell>{row.desc}</TableCell>
-                    <TableCell align="right">{row.qty}</TableCell>
-                    <TableCell align="right">{row.unit}</TableCell>
-                    <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-                    <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+                {bookList.map((book) => (
+                  <TableRow key={book.isbn}>
+                    <TableCell>{book.isbn}</TableCell>
+                    <TableCell align="right">{book.title}</TableCell>
+                    <TableCell align="right">{book.unitPrice}</TableCell>
+                    <TableCell align="right">{book.amount}</TableCell>
+                    <TableCell align="right">{book.total}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
                   <TableCell rowSpan={4} />
-                  <TableCell colSpan={2}>합계</TableCell>
-                  <TableCell align="right">
-                    {ccyFormat(invoiceSubtotal)}
-                  </TableCell>
+                  <TableCell>합계</TableCell>
+                  <TableCell align="right">{history.totalPrice}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>결제수단</TableCell>
-                  <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-                    0
-                  )} %`}</TableCell>
-                  <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+                  <TableCell align="right">{history.payment}</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>결제금액</TableCell>
-                  <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-                    0
-                  )} %`}</TableCell>
-                  <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+                  <TableCell align="right">{history.money}</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>거스름돈</TableCell>
-                  <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-                    0
-                  )} %`}</TableCell>
-                  <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+                  <TableCell align="right">{history.change}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell colSpan={2}></TableCell>
-                  <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
