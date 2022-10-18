@@ -60,13 +60,13 @@ const SalesHistoryPage = () => {
     sellDate: string;
     totalPrice: number;
   }
-  const [firstDay, setFirstDay] = useState<Dayjs | null>(null);
-  const [lastDay, setlastDay] = useState<Dayjs | null>(null);
+  const [firstDay, setFirstDay] = useState<Dayjs | null>(dayjs(new Date()));
+  const [lastDay, setlastDay] = useState<Dayjs | null>(dayjs(new Date()));
 
-  console.log("first " + firstDay?.format() + " last " + lastDay?.format());
   const [historyList, setHistoryList] = useState<HistoryType[]>([]);
   const [lastIdx, setLastIdx] = useState(0);
-  const [type, setType] = useState("DATE");
+  const [type, setType] = useState("DEFAULT");
+
   const onSetType = (e: SelectChangeEvent) => {
     setType(e.target.value as string);
   };
@@ -79,38 +79,15 @@ const SalesHistoryPage = () => {
   const onSearch = () => {
     bringDataByConditon();
   };
-  const bringData = useCallback(async () => {
-    const resHistory = await new Api().getData(
-      "http://localhost:8080/admin/history",
-      {}
-    );
-
-    const _historyList = await resHistory.data.content.map(
-      (historyData: any) => (
-        setLastIdx(lastIdx + 1),
-        {
-          id: historyData.id,
-          sellDate: historyData.sellDate,
-          totalPrice: historyData.totalPrice,
-        }
-      )
-    );
-    console.log(resHistory);
-    setHistoryList(historyList.concat(_historyList));
-  }, []);
   const bringDataByConditon = useCallback(async () => {
-    const paramDate = {
-      price: price,
-      startDate: firstDay?.format(),
-      endDate: lastDay?.format(),
-    };
-    setHistoryList([]);
+    setHistoryList(historyList.filter((history) => history.id !== null));
+
     const resHistory = await new Api().getData(
       `http://localhost:8080/admin/history/type/${type}`,
       {
         price: price,
-        startDate: "2022-10-15T01:49:43.560073",
-        endDate: "2022-10-17T01:49:43.560073",
+        startDate: firstDay?.format("YYYY-MM-DDTHH:mm:ss"),
+        endDate: lastDay?.format("YYYY-MM-DDTHH:mm:ss"),
       }
     );
 
@@ -124,11 +101,14 @@ const SalesHistoryPage = () => {
         }
       )
     );
+
     console.log(resHistory);
-    setHistoryList(historyList.concat(_historyList));
-  }, [type, price, firstDay, lastDay]);
+    setHistoryList(_historyList);
+    //[].concat() => []에 해당하는 배열 뒤에 ()값을 추가한다.
+  }, [type, price, firstDay, lastDay, historyList]);
+
   useEffect(() => {
-    bringData();
+    bringDataByConditon();
   }, []);
 
   console.log("book data ::", historyList);
@@ -179,11 +159,11 @@ const SalesHistoryPage = () => {
                         value={type}
                         label="Type"
                         onChange={onSetType}
-                        defaultValue="Date"
+                        defaultValue="DEFAULT"
                       >
                         <MenuItem value="DATE">날짜</MenuItem>
                         <MenuItem value="PRICE">금액</MenuItem>
-                        {/* <MenuItem value="All">날짜+금액</MenuItem> */}
+                        <MenuItem value="DEFAULT">전체</MenuItem>
                       </Select>
                     </FormControl>
                     {type === "DATE" ? (

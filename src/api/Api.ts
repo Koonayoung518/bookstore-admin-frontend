@@ -5,7 +5,6 @@ class Api {
     try {
       const response = await axios.get(url, { params });
       console.log(response.data);
-      console.log("params " + params.price);
 
       const result = await response.data;
       return result;

@@ -17,37 +17,46 @@ import BookCard from "../components/BookCard";
 import ShoppingNavBar from "../components/shopping/ShoppingNavBar";
 
 const ShoppingPage = () => {
-  const [bookList, setBookList] = useState([
-    {
-      isbn: "",
-      title: "",
-      publisher: "",
-      author: "",
-      price: 0,
-      pubdate: "",
-      stock: 0,
-      image: "",
-    },
-  ]);
+  // const [bookList, setBookList] = useState([
+  //   {
+  //     isbn: "",
+  //     title: "",
+  //     publisher: "",
+  //     author: "",
+  //     price: 0,
+  //     pubdate: "",
+  //     stock: 0,
+  //     image: "",
+  //   },
+  // ]);
   const [lastIdx, setLastIdx] = useState(0);
+  interface BookType {
+    isbn: string;
+    title: string;
+    publisher: string;
+    author: string;
+    price: number;
+    pubdate: string;
+    stock: number;
+    image: string;
+  }
+  const [bookList, setBookList] = useState<BookType[]>([]);
+
   const bringData = useCallback(async () => {
     const resBook = await new Api().getData(
-      "http://localhost:8080/manage/book",
+      "http://localhost:8080/admin/manage/book",
       {}
     );
 
-    const _bookList = await resBook.list.map(
+    const _bookList = await resBook.data.map(
       (bookData: any) => (
         setLastIdx(lastIdx + 1),
         {
           isbn: bookData.isbn,
           title: bookData.title,
           publisher: bookData.publisher,
-          author: bookData.author,
-          price: bookData.price,
-          pubdate: bookData.pubdate,
-          stock: bookData.stock,
           image: bookData.image,
+          stock: bookData.stock,
         }
       )
     );
