@@ -54,14 +54,14 @@ const SellBookPage = () => {
     else {
       setChange(received - totalPrice);
       _change = received - totalPrice;
-      onRegister("Cash");
+      onRegister("CASH");
     }
   }, [received, totalPrice]);
   const onRegister = (p: string) => {
     postData(p);
   };
   const onCard = useCallback(() => {
-    onRegister("Card");
+    onRegister("CARD");
   }, [bookList, totalPrice]);
   const [isbn, setIsbn] = useState("");
 

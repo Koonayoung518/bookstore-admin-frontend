@@ -87,7 +87,6 @@ const ManagePage = (props: any) => {
   useEffect(() => {
     bringData();
   }, []);
-  console.log("book data ::", bookList);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -159,7 +158,7 @@ const ManagePage = (props: any) => {
                       </TableHead>
                       <TableBody>
                         {bookList.map((book: any) => (
-                          <TableRow>
+                          <TableRow key={book.isbn}>
                             <TableCell>
                               <Box
                                 sx={{

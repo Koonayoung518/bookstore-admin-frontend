@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 const BookCard = ({ product, ...rest }: any) => {
   return (
     <Box
@@ -16,19 +7,20 @@ const BookCard = ({ product, ...rest }: any) => {
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         bgcolor: "background.paper",
-        overflow: "hidden",
+        overflow: "auto",
         borderRadius: "12px",
         boxShadow: 1,
         fontWeight: "bold",
+        height: 280,
       }}
     >
       <Box
         component="img"
         sx={{
-          height: 233,
-          width: 350,
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 350, md: 250 },
+          height: 260,
+          width: 330,
+          maxHeight: { xs: 260, md: 167 },
+          maxWidth: { xs: 330, md: 250 },
         }}
         alt="book image"
         src={product.image}
@@ -39,7 +31,7 @@ const BookCard = ({ product, ...rest }: any) => {
           flexDirection: "column",
           alignItems: { xs: "center", md: "flex-start" },
           m: 3,
-          minWidth: { md: 500 },
+          maxWidth: { md: 400 },
         }}
       >
         <Box component="span" sx={{ fontSize: 20, mt: 1 }}>
@@ -57,22 +49,6 @@ const BookCard = ({ product, ...rest }: any) => {
         <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
           재고 : {product.stock}권
         </Box>
-        <Box
-          sx={{
-            mt: 1.5,
-            p: 0.5,
-            borderRadius: "5px",
-            color: "primary.main",
-            fontWeight: "medium",
-            display: "flex",
-            fontSize: 12,
-            alignItems: "center",
-            "& svg": {
-              fontSize: 21,
-              mr: 0.5,
-            },
-          }}
-        ></Box>
       </Box>
     </Box>
   );

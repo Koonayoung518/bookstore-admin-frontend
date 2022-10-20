@@ -15,20 +15,8 @@ import { useCallback, useState, useEffect } from "react";
 import Api from "../api/Api";
 import BookCard from "../components/BookCard";
 import ShoppingNavBar from "../components/shopping/ShoppingNavBar";
-
+import NoticeCard from "../components/NoticeCard";
 const ShoppingPage = () => {
-  // const [bookList, setBookList] = useState([
-  //   {
-  //     isbn: "",
-  //     title: "",
-  //     publisher: "",
-  //     author: "",
-  //     price: 0,
-  //     pubdate: "",
-  //     stock: 0,
-  //     image: "",
-  //   },
-  // ]);
   const [lastIdx, setLastIdx] = useState(0);
   interface BookType {
     isbn: string;
@@ -42,36 +30,66 @@ const ShoppingPage = () => {
   }
   const [bookList, setBookList] = useState<BookType[]>([]);
 
-  const bringData = useCallback(async () => {
-    const resBook = await new Api().getData(
-      "http://localhost:8080/admin/manage/book",
-      {}
-    );
+  const [currentPage, setCurrentPage] = useState(1);
+  const onPageChange = (e: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+  const [totalPage, setTotalPage] = useState(1);
 
-    const _bookList = await resBook.data.map(
+  const [info, setInfo] = useState({
+    operatingTime: "",
+    location: "",
+    phone: "",
+    notice: "",
+  });
+
+  const bringData = useCallback(async () => {
+    const resBook = await new Api().getData("http://localhost:8080/book", {
+      page: currentPage - 1,
+    });
+
+    const _bookList = await resBook.data.content.map(
       (bookData: any) => (
         setLastIdx(lastIdx + 1),
         {
           isbn: bookData.isbn,
           title: bookData.title,
           publisher: bookData.publisher,
+          author: bookData.author,
           image: bookData.image,
+          price: bookData.price,
           stock: bookData.stock,
         }
       )
     );
+    setTotalPage(resBook.data.totalPages);
+
     console.log(resBook);
     setBookList(bookList.concat(_bookList));
-  }, []);
+
+    //서점 정보
+    const resInfo = await new Api().getData(
+      "http://localhost:8080/bookStoreInfo",
+      {}
+    );
+    const _inputInfo = {
+      operatingTime: resInfo.data.operatingTime,
+      location: resInfo.data.location,
+      phone: resInfo.data.phone,
+      notice: resInfo.data.notice,
+    };
+    console.log("info ::", _inputInfo);
+    setInfo(_inputInfo);
+  }, [currentPage]);
 
   useEffect(() => {
     bringData();
-  }, []);
-  console.log("book data ::", bookList);
+  }, [currentPage]);
 
   return (
     <>
       <ShoppingNavBar></ShoppingNavBar>
+      <NoticeCard info={info}></NoticeCard>
       <Box
         component="main"
         sx={{
@@ -88,11 +106,7 @@ const ShoppingPage = () => {
               flexWrap: "wrap",
               m: -1,
             }}
-          >
-            <Typography sx={{ m: 1 }} variant="h4">
-              Books
-            </Typography>
-          </Box>
+          ></Box>
           <Box sx={{ mt: 3 }}>
             <Card>
               <CardContent>
@@ -113,10 +127,14 @@ const ShoppingPage = () => {
               </CardContent>
             </Card>
           </Box>
-          <Box sx={{ pt: 3 }}>
-            <Grid container spacing={5}>
+          <Box sx={{ pt: 3, mt: 3, pl: 10 }}>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
               {bookList.map((book) => (
-                <Grid item key={book.isbn} lg={8} md={6} xs={12}>
+                <Grid item key={book.isbn} xs={6}>
                   <BookCard product={book} />
                 </Grid>
               ))}
@@ -129,7 +147,14 @@ const ShoppingPage = () => {
               pt: 3,
             }}
           >
-            <Pagination color="primary" count={3} size="small" />
+            <Pagination
+              color="primary"
+              defaultPage={1}
+              page={currentPage}
+              count={totalPage}
+              onChange={onPageChange}
+              size="small"
+            />
           </Box>
         </Container>
       </Box>

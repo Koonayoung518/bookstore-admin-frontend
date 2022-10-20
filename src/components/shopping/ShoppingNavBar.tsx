@@ -92,22 +92,7 @@ const ShoppingNavBar = () => {
                 sx={{ my: 2, color: "white", display: "block" }}
                 onClick={goSellBookPage}
               >
-                POS
-              </Button>
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                onClick={goSalesHistoryPage}
-              >
-                판매내역
-              </Button>
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                onClick={goShoppingPage}
-              >
-                웹사이트
-              </Button>
-              <Button sx={{ my: 2, color: "white", display: "block" }}>
-                설정
+                마이페이지
               </Button>
             </Box>
 

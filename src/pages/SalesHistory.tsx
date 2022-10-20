@@ -51,6 +51,12 @@ const SalesHistoryPage = () => {
   });
   const navigate = useNavigate();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const onPageChange = (e: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+  const [totalPage, setTotalPage] = useState(1);
+
   const goDetailPage = (id: any) => {
     navigate("/sell/book/history/" + id);
   };
@@ -77,20 +83,19 @@ const SalesHistoryPage = () => {
   }, []);
 
   const onSearch = () => {
-    bringDataByConditon();
+    setCurrentPage(1);
   };
   const bringDataByConditon = useCallback(async () => {
-    setHistoryList(historyList.filter((history) => history.id !== null));
-
     const resHistory = await new Api().getData(
       `http://localhost:8080/admin/history/type/${type}`,
       {
         price: price,
         startDate: firstDay?.format("YYYY-MM-DDTHH:mm:ss"),
         endDate: lastDay?.format("YYYY-MM-DDTHH:mm:ss"),
+        page: currentPage - 1,
       }
     );
-
+    setTotalPage(resHistory.data.totalPages);
     const _historyList = await resHistory.data.content.map(
       (historyData: any) => (
         setLastIdx(lastIdx + 1),
@@ -105,11 +110,11 @@ const SalesHistoryPage = () => {
     console.log(resHistory);
     setHistoryList(_historyList);
     //[].concat() => []에 해당하는 배열 뒤에 ()값을 추가한다.
-  }, [type, price, firstDay, lastDay, historyList]);
+  }, [type, price, firstDay, lastDay, historyList, currentPage]);
 
   useEffect(() => {
     bringDataByConditon();
-  }, []);
+  }, [currentPage]);
 
   console.log("book data ::", historyList);
 
@@ -242,7 +247,7 @@ const SalesHistoryPage = () => {
                           </TableHead>
                           <TableBody>
                             {historyList.map((history: any) => (
-                              <TableRow>
+                              <TableRow key={history.id}>
                                 <TableCell>
                                   <Box
                                     sx={{
@@ -289,7 +294,14 @@ const SalesHistoryPage = () => {
                 pt: 3,
               }}
             >
-              <Pagination color="primary" count={3} size="small" />
+              <Pagination
+                color="primary"
+                defaultPage={1}
+                page={currentPage}
+                count={totalPage}
+                onChange={onPageChange}
+                size="small"
+              />
             </Box>
           </Container>
         </Box>
