@@ -38,7 +38,7 @@ const ShoppingNavBar = () => {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {};
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ bgcolor: "#815B5B" }}>
+      <AppBar position="static" sx={{ bgcolor: "#041C32" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -88,12 +88,12 @@ const ShoppingNavBar = () => {
               BookStore
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              <Button
+              {/* <Button
                 sx={{ my: 2, color: "white", display: "block" }}
                 onClick={goSellBookPage}
               >
                 마이페이지
-              </Button>
+              </Button> */}
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>

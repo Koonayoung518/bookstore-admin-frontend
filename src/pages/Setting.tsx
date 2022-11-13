@@ -22,7 +22,7 @@ const SettingPage = () => {
       MuiButton: {
         styleOverrides: {
           root: {
-            background: "#9E7676",
+            background: "#041C32",
           },
         },
       },
@@ -52,7 +52,7 @@ const SettingPage = () => {
 
   const bringData = useCallback(async () => {
     const resInfo = await new Api().getData(
-      "http://localhost:8080/bookStoreInfo",
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/bookStoreInfo",
       {}
     );
     setOperatingTime(resInfo.data.operatingTime);
@@ -66,12 +66,13 @@ const SettingPage = () => {
     const confirm = window.confirm("등록하시겠습니까?");
     if (confirm === true) {
       postData();
+      window.alert("등록되었습니다.");
     }
   };
 
   const postData = useCallback(async () => {
     const result = await new Api().postData(
-      "http://localhost:8080/admin/bookStoreInfo",
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/bookStoreInfo",
       {
         operatingTime: operatingTime,
         phone: phone,
@@ -85,11 +86,12 @@ const SettingPage = () => {
     const confirm = window.confirm("삭제하시겠습니까?");
     if (confirm === true) {
       deleteData();
+      window.alert("삭제되었습니다.");
     }
   };
   const deleteData = useCallback(async () => {
     const response = await new Api().deleteData(
-      "http://localhost:8080/admin/bookStoreInfo"
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/bookStoreInfo"
     );
   }, []);
 
@@ -121,13 +123,13 @@ const SettingPage = () => {
               <Typography sx={{ m: 1 }} variant="h4">
                 설정
               </Typography>
-              <Box sx={{ m: 1 }}>
+              {/* <Box sx={{ m: 1 }}>
                 <Button sx={{ mr: 1 }}>Import</Button>
                 <Button sx={{ mr: 1 }}>Export</Button>
                 <Button color="primary" variant="contained">
                   Add products
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
             <Box sx={{ mt: 3 }}>
               <Card>

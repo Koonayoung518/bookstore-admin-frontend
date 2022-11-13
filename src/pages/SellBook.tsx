@@ -60,6 +60,9 @@ const SellBookPage = () => {
   const onRegister = (p: string) => {
     postData(p);
   };
+  const handleOnKeyPress = (e: any) => {
+    if (e.key === "Enter") onSearch();
+  };
   const onCard = useCallback(() => {
     onRegister("CARD");
   }, [bookList, totalPrice]);
@@ -71,12 +74,13 @@ const SellBookPage = () => {
 
   const onSearch = () => {
     bringData();
+    setIsbn("");
   };
 
   const bringData = useCallback(async () => {
     var newbook = true;
     const resBook = await new Api().getData(
-      `http://localhost:8080/admin/sell/book/${isbn}`,
+      `http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/sell/book/${isbn}`,
       {}
     );
 
@@ -114,7 +118,7 @@ const SellBookPage = () => {
   const postData = useCallback(
     async (p: string) => {
       const result = await new Api().postData(
-        "http://localhost:8080/admin/sell/book",
+        "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/sell/book",
         {
           bookList,
           totalPrice: totalPrice,
@@ -177,7 +181,7 @@ const SellBookPage = () => {
 
   useEffect(() => {
     onSetTotalPrice();
-  }, [bookList, change]);
+  }, [bookList, change, isbn]);
   return (
     <>
       <NavBar></NavBar>
@@ -317,16 +321,10 @@ const SellBookPage = () => {
           }}
           placeholder="Register book"
           variant="outlined"
+          value={isbn}
           onChange={onSetIsbn}
+          onKeyPress={handleOnKeyPress}
         />
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={onSearch}
-          sx={{ ml: 2 }}
-        >
-          <SearchIcon fontSize="large"></SearchIcon>
-        </Button>
       </Box>
     </>
   );

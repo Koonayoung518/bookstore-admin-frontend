@@ -43,7 +43,7 @@ const SalesHistoryPage = () => {
       MuiButton: {
         styleOverrides: {
           root: {
-            background: "#9E7676",
+            background: "#041C32",
           },
         },
       },
@@ -84,11 +84,14 @@ const SalesHistoryPage = () => {
 
   const onSearch = () => {
     setCurrentPage(1);
+    bringDataByCondition();
   };
-  const bringDataByConditon = useCallback(async () => {
+  const bringDataByCondition = useCallback(async () => {
+    console.log("bringdatabycondition" + price);
     const resHistory = await new Api().getData(
-      `http://localhost:8080/admin/history/type/${type}`,
+      `http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/history/type`,
       {
+        type: type,
         price: price,
         startDate: firstDay?.format("YYYY-MM-DDTHH:mm:ss"),
         endDate: lastDay?.format("YYYY-MM-DDTHH:mm:ss"),
@@ -113,7 +116,7 @@ const SalesHistoryPage = () => {
   }, [type, price, firstDay, lastDay, historyList, currentPage]);
 
   useEffect(() => {
-    bringDataByConditon();
+    bringDataByCondition();
   }, [currentPage]);
 
   console.log("book data ::", historyList);
@@ -142,13 +145,6 @@ const SalesHistoryPage = () => {
               <Typography sx={{ m: 1 }} variant="h4">
                 판매내역
               </Typography>
-              <Box sx={{ m: 1 }}>
-                <Button sx={{ mr: 1 }}>Import</Button>
-                <Button sx={{ mr: 1 }}>Export</Button>
-                <Button color="primary" variant="contained">
-                  Add products
-                </Button>
-              </Box>
             </Box>
             <Box sx={{ mt: 3 }}>
               <Card>

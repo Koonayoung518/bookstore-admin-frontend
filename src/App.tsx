@@ -9,9 +9,12 @@ import SalesHistoryPage from "./pages/SalesHistory";
 import ShoppingPage from "./pages/Shopping";
 import SalesHistoryDetailPage from "./pages/SalesHistoryDetail";
 import SettingPage from "./pages/Setting";
+import IntroPage from "./pages/Intro";
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<IntroPage />} />
+
       <Route path="/manage/book" element={<ManagePage />} />
       <Route path="/manage/book/:isbn" element={<ManageBookDetailPage />} />
       <Route

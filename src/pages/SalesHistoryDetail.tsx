@@ -5,11 +5,6 @@ import {
   Container,
   CardContent,
   Card,
-  Grid,
-  Pagination,
-  TextField,
-  InputAdornment,
-  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -20,9 +15,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { Link, useNavigate } from "react-router-dom";
-import BookCard from "../components/BookCard";
 import NavBar from "../components/NavBar";
 import Api from "../api/Api";
 
@@ -48,7 +40,7 @@ const SalesHistoryDetailPage = (props: any) => {
 
   const bringData = useCallback(async () => {
     const resHistory = await new Api().getData(
-      `http://localhost:8080/admin/history/${params.id}`,
+      `http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/history/${params.id}`,
       {}
     );
     const _inputHistory = {

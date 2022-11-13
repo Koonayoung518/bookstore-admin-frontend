@@ -28,7 +28,7 @@ const ManageBookDetailPage = (props: any) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            background: "#9E7676",
+            background: "#041C32",
           },
         },
       },
@@ -37,7 +37,9 @@ const ManageBookDetailPage = (props: any) => {
 
   const navigate = useNavigate();
   const params = useParams();
-  const api = "http://localhost:8080/admin/manage/book/" + params.isbn;
+  const api =
+    "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book/" +
+    params.isbn;
   const [book, setBook] = useState({
     isbn: "",
     title: "",
@@ -56,7 +58,7 @@ const ManageBookDetailPage = (props: any) => {
     const confirm = window.confirm("삭제하시겠습니까?");
     if (confirm === true) {
       deleteData();
-      navigate("/manage/book");
+      window.alert("삭제되었습니다.");
     }
   };
 
@@ -64,13 +66,13 @@ const ManageBookDetailPage = (props: any) => {
     const confirm = window.confirm("수정하시겠습니까?");
     if (confirm === true) {
       putData();
-      navigate("/manage/book/" + params.isbn);
+      window.alert("수정되었습니다.");
     }
   };
 
   const putData = useCallback(async () => {
     const result = await new Api().putData(
-      "http://localhost:8080/admin/manage/book",
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book",
       {
         isbn: book.isbn,
         price: price,
@@ -81,7 +83,7 @@ const ManageBookDetailPage = (props: any) => {
 
   const deleteData = useCallback(async () => {
     const response = await new Api().deleteData(
-      `http://localhost:8080/admin/manage/book/${book.isbn}`
+      `http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book/${book.isbn}`
     );
   }, [book]);
   const bringData = useCallback(async () => {
@@ -142,7 +144,7 @@ const ManageBookDetailPage = (props: any) => {
                     >
                       <CardMedia
                         component="img"
-                        height="250"
+                        height="300"
                         image={book.image}
                         alt="이미지 없음"
                       />
@@ -153,11 +155,11 @@ const ManageBookDetailPage = (props: any) => {
                     </Box>
                   </CardContent>
                   <Divider />
-                  <CardActions>
+                  {/* <CardActions>
                     <Button fullWidth variant="contained">
                       책 표지 등록
                     </Button>
-                  </CardActions>
+                  </CardActions> */}
                 </Card>
               </Grid>
               <Grid item lg={8} md={6} xs={12}>

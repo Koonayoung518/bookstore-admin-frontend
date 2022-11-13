@@ -43,7 +43,7 @@ const NavBar = () => {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {};
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static" sx={{ bgcolor: "#815B5B" }}>
+      <AppBar position="static" sx={{ bgcolor: "#041C32" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography

@@ -31,7 +31,7 @@ const ManageBookRegisterPage = (props: any) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            background: "#9E7676",
+            background: "#041C32",
           },
         },
       },
@@ -65,6 +65,9 @@ const ManageBookRegisterPage = (props: any) => {
     setStock(e.target.value);
   }, []);
 
+  const handleOnKeyPress = (e: any) => {
+    if (e.key === "Enter") onSearch();
+  };
   const onSearch = () => {
     bringData();
   };
@@ -72,13 +75,13 @@ const ManageBookRegisterPage = (props: any) => {
     const confirm = window.confirm("등록하시겠습니까?");
     if (confirm === true) {
       postData();
-      navigate("/manage/book");
+      window.alert("등록되었습니다.");
     }
   };
   useEffect(() => {}, [book]);
   const bringData = useCallback(async () => {
     const resBook = await new Api().getData(
-      `http://localhost:8080/admin/manage/book/${isbn}`,
+      `http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book/${isbn}`,
       {}
     );
     const _inputBook = {
@@ -99,7 +102,7 @@ const ManageBookRegisterPage = (props: any) => {
 
   const postData = useCallback(async () => {
     const result = await new Api().postData(
-      "http://localhost:8080/admin/manage/book",
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book",
       {
         isbn: book.isbn,
         title: book.title,
@@ -144,6 +147,7 @@ const ManageBookRegisterPage = (props: any) => {
                       placeholder="Register book"
                       variant="outlined"
                       onChange={onSetIsbn}
+                      onKeyPress={handleOnKeyPress}
                     />
                     <Button
                       color="primary"
@@ -175,7 +179,7 @@ const ManageBookRegisterPage = (props: any) => {
                       >
                         <CardMedia
                           component="img"
-                          height="250"
+                          height="300"
                           image={book.image}
                           alt="이미지 없음"
                         />
@@ -192,11 +196,11 @@ const ManageBookRegisterPage = (props: any) => {
                       </Box>
                     </CardContent>
                     <Divider />
-                    <CardActions>
+                    {/* <CardActions>
                       <Button fullWidth variant="contained">
                         책 표지 등록
                       </Button>
-                    </CardActions>
+                    </CardActions> */}
                   </Card>
                 </Grid>
                 <Grid item lg={8} md={6} xs={12}>

@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-
+import axios from "axios";
 import {
   Avatar,
   Box,
@@ -26,6 +26,8 @@ import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { isBindingName } from "typescript";
 import "../font/font.css";
+import Search from "@mui/icons-material/Search";
+import SearchIcon from "@mui/icons-material/Search";
 const ManagePage = (props: any) => {
   const theme = createTheme({
     typography: {
@@ -35,7 +37,7 @@ const ManagePage = (props: any) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            background: "#9E7676",
+            background: "#041C32",
           },
         },
       },
@@ -49,6 +51,7 @@ const ManagePage = (props: any) => {
   const goDetailPage = (isbn: any) => {
     navigate("/manage/book/" + isbn);
   };
+
   interface BookType {
     isbn: string;
     title: string;
@@ -60,11 +63,33 @@ const ManagePage = (props: any) => {
     image: string;
   }
   const [bookList, setBookList] = useState<BookType[]>([]);
-
   const [lastIdx, setLastIdx] = useState(0);
+  const [search, setSearch] = useState("");
+
+  const searchData = useCallback(async () => {
+    const resBook = await new Api().getData(
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book/title",
+      { title: search }
+    );
+
+    const _bookList = await resBook.data.map((bookData: any) => ({
+      isbn: bookData.isbn,
+      title: bookData.title,
+      publisher: bookData.publisher,
+      image: bookData.image,
+      stock: bookData.stock,
+    }));
+    console.log(resBook);
+    setBookList(_bookList);
+  }, [search]);
+
+  const onSetSearch = useCallback((e: any) => {
+    setSearch(e.target.value);
+  }, []);
+
   const bringData = useCallback(async () => {
     const resBook = await new Api().getData(
-      "http://localhost:8080/admin/manage/book",
+      "http://ec2-43-200-118-169.ap-northeast-2.compute.amazonaws.com:8080/admin/manage/book",
       {}
     );
 
@@ -83,6 +108,10 @@ const ManagePage = (props: any) => {
     console.log(resBook);
     setBookList(bookList.concat(_bookList));
   }, []);
+
+  const onSearch = () => {
+    searchData();
+  };
 
   useEffect(() => {
     bringData();
@@ -121,9 +150,9 @@ const ManagePage = (props: any) => {
               <Box sx={{ mt: 3 }}>
                 <Card>
                   <CardContent>
-                    <Box sx={{ maxWidth: 500 }}>
+                    <Box>
                       <TextField
-                        fullWidth
+                        sx={{ width: "50ch" }}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
@@ -134,9 +163,18 @@ const ManagePage = (props: any) => {
                             </InputAdornment>
                           ),
                         }}
-                        placeholder="Search book"
+                        placeholder="책 제목을 입력하세요."
                         variant="outlined"
+                        onChange={onSetSearch}
                       />
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={onSearch}
+                        sx={{ ml: 2 }}
+                      >
+                        <SearchIcon fontSize="large"></SearchIcon>
+                      </Button>
                     </Box>
                   </CardContent>
                 </Card>
